@@ -8,18 +8,20 @@ class TestResult < Minitest::Test
       SimpleCov.formatter = nil
       @original_result = {source_fixture('sample.rb') => [nil, 1, 1, 1, nil, nil, 1, 1, nil, nil],
           source_fixture('app/models/user.rb') => [nil, 1, 1, 1, nil, nil, 1, 0, nil, nil],
-          source_fixture('app/controllers/sample_controller.rb') => [nil, 1, 1, 1, nil, nil, 1, 0, nil, nil]}
+          source_fixture('app/controllers/sample_controller.rb') => [nil, 1, 1, 1, nil, nil, 1, 0, nil, nil],
+          source_fixture('app/assets/javascripts/sample.js') => [1, 1, nil, 1, 1, nil, nil, 1, nil]
+      }
     end
 
     context "a simple cov result initialized from that" do
       setup { @result = SimpleCov::Result.new(@original_result) }
 
-      should "have 3 filenames" do
-        assert_equal 3, @result.filenames.count
+      should "have 4 filenames" do
+        assert_equal 4, @result.filenames.count
       end
 
-      should "have 3 source files" do
-        assert_equal 3, @result.source_files.count
+      should "have 4 source files" do
+        assert_equal 4, @result.source_files.count
         assert @result.source_files.all? {|s| s.instance_of?(SimpleCov::SourceFile)}, "Not all instances are of SimpleCov::SourceFile type"
       end
 
@@ -50,7 +52,7 @@ class TestResult < Minitest::Test
         context "loaded back with from_yaml" do
           setup { @dumped_result = SimpleCov::Result.from_hash(@hash) }
 
-          should "have 3 source files" do
+          should "have 4 source files" do
             assert_equal @result.source_files.count, @dumped_result.source_files.count
           end
 
@@ -78,8 +80,8 @@ class TestResult < Minitest::Test
         SimpleCov.add_filter 'sample.rb'
       end
 
-      should "have 2 files in a new simple cov result" do
-        assert_equal 2, SimpleCov::Result.new(@original_result).source_files.length
+      should "have 3 files in a new simple cov result" do
+        assert_equal 3, SimpleCov::Result.new(@original_result).source_files.length
       end
 
       should "have 80 covered percent" do
@@ -97,8 +99,8 @@ class TestResult < Minitest::Test
         @result = SimpleCov::Result.new(@original_result)
       end
 
-      should "have 3 groups" do
-        assert_equal 3, @result.groups.length
+      should "have 4 groups" do
+        assert_equal 4, @result.groups.length
       end
 
       should "have user.rb in 'Models' group" do
@@ -138,12 +140,13 @@ class TestResult < Minitest::Test
         SimpleCov.configure do
           add_group 'Models', 'app/models'
           add_group 'Controllers', 'app/controllers'
+          add_group 'Javascripts', 'app/assets/javascripts'
         end
         @result = SimpleCov::Result.new(@original_result)
       end
 
-      should "have 3 groups" do
-        assert_equal 3, @result.groups.length
+      should "have 4 groups" do
+        assert_equal 4, @result.groups.length
       end
 
       should "have 1 item per group" do
