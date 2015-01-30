@@ -23,6 +23,7 @@ SimpleCov.profiles.define 'rails' do
   add_filter '/vendor/bundle/'
 
   add_group 'Controllers', 'app/controllers'
+  add_group 'Javascripts', 'app/assets/javascripts'
   add_group 'Models', 'app/models'
   add_group 'Mailers', 'app/mailers'
   add_group 'Helpers', 'app/helpers'

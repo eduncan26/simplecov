@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'docile'
 require 'simplecov/formatter/multi_formatter'
+require 'yaml'
 #
 # Bundles the configuration options used for SimpleCov. All methods
 # defined here are usable from SimpleCov directly. Please check out
@@ -247,6 +248,14 @@ module SimpleCov::Configuration
   #
   def add_group(group_name, filter_argument=nil, &filter_proc)
     groups[group_name] = parse_filter(filter_argument, &filter_proc)
+  end
+
+  #
+  # Config a location for a jasmine.yml file where src directories will be held in a yaml manifest.
+  #
+  def jasmine_yml_manifest(path)
+    src_config = YAML.load_file("#{root}/#{path}/jasmine.yml")
+    src_config['src_files'].to_a.map { |x| 'app/' + x }
   end
 
   private
